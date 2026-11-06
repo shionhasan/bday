@@ -1,0 +1,257 @@
+:root {
+    --bg-1: #fff5f7;
+    --bg-2: #ffd9e2;
+    --ink: #4a2233;
+    --accent: #c9184a;
+    --accent-soft: #ff758f;
+
+    --font-script: "Great Vibes", "Brush Script MT", cursive;
+    --font-hand: "Dancing Script", "Segoe Script", cursive;
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    overflow-x: hidden;
+    color: var(--ink);
+    font-family: var(--font-serif);
+    background: radial-gradient(circle at 50% 30%, var(--bg-1), var(--bg-2));
+}
+
+/* ---------- Layout ---------- */
+.scene {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1360px;
+    padding: 1rem;
+}
+
+.canvas-wrap {
+    position: relative;
+    width: min(100%, 820px);
+    min-width: 0;
+    flex-shrink: 1;
+}
+
+#canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1100 / 680;
+    touch-action: manipulation;
+}
+
+#canvas.hand {
+    cursor: pointer;
+}
+
+/* ---------- Hint ---------- */
+.hint {
+    position: absolute;
+    left: 48.6%;
+    top: 57%;
+    transform: translateX(-50%);
+    font-family: var(--font-hand);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+    pointer-events: none;
+    animation: pulse 1.6s ease-in-out infinite;
+    transition: opacity 0.4s ease;
+}
+
+.hint.hidden {
+    opacity: 0;
+    animation: none;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1; }
+}
+
+/* ---------- Message panel ---------- */
+.message {
+    flex: 0 0 auto;
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: width 1s ease, opacity 1s ease, margin 1s ease;
+}
+
+.scene.done .message {
+    width: 440px;
+    opacity: 1;
+    margin-left: 1rem;
+}
+
+.message-inner {
+    width: 440px;
+    padding: 0.5rem 0.25rem;
+}
+
+/* ---------- Text lines ---------- */
+.say {
+    position: relative;
+}
+
+.say .rest {
+    visibility: hidden;
+}
+
+/* Blinking typing cursor, only while a line is being typed */
+.caret {
+    display: none;
+    width: 0;
+    height: 1em;
+    margin-left: 2px;
+    border-left: 2px solid var(--accent);
+    vertical-align: -0.1em;
+    animation: blink 0.8s steps(1) infinite;
+}
+
+.say.typing .caret {
+    display: inline-block;
+}
+
+@keyframes blink {
+    50% { border-color: transparent; }
+}
+
+/* "My Beautiful Sister" */
+.say.title {
+    font-family: var(--font-script);
+    font-size: clamp(2.4rem, 5vw, 3.7rem);
+    line-height: 1.25;
+    color: var(--accent);
+    text-shadow: 0 2px 14px rgba(201, 24, 74, 0.25);
+    margin-bottom: 0.1rem;
+}
+
+/* "Happy Birthday" */
+.say.heading {
+    font-family: var(--font-hand);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+    line-height: 1.2;
+    color: #8f1239;
+    text-shadow: 0 2px 10px rgba(255, 117, 143, 0.45);
+}
+
+.say.heading::after {
+    content: "";
+    display: block;
+    width: 130px;
+    height: 2px;
+    margin: 0.45rem 0 1rem;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-soft), transparent);
+    opacity: 0;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: opacity 0.6s ease, transform 0.9s ease;
+}
+
+.say.heading.typing::after,
+.say.heading.typed::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Blessing lines */
+.say.wish {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.02rem, 1.75vw, 1.22rem);
+    line-height: 1.75;
+    margin-bottom: 0.7rem;
+}
+
+/* Last line */
+.say.closing {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    font-size: clamp(1.4rem, 2.6vw, 1.85rem);
+    line-height: 1.5;
+    color: var(--accent);
+    margin-top: 0.6rem;
+}
+
+/* Optional signature */
+.say.from {
+    font-family: var(--font-script);
+    font-size: 1.9rem;
+    color: #8f1239;
+    margin-top: 0.4rem;
+    text-align: right;
+}
+
+/* ---------- Clock ---------- */
+.clock {
+    display: inline-block;
+    margin-top: 1.4rem;
+    padding: 0.4rem 0.95rem;
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(201, 24, 74, 0.25);
+    border-radius: 999px;
+}
+
+.clock:empty {
+    display: none;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 860px) {
+    .scene {
+        flex-direction: column;
+    }
+
+    .message {
+        width: 100%;
+        max-height: 0;
+    }
+
+    .scene.done .message {
+        width: 100%;
+        max-height: 760px;
+        margin-left: 0;
+    }
+
+    .message-inner {
+        width: 100%;
+        text-align: center;
+        padding: 0 0.75rem 1.5rem;
+    }
+
+    .say.heading::after {
+        margin-left: auto;
+        margin-right: auto;
+        transform-origin: center;
+        background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+    }
+
+    .say.from {
+        text-align: center;
+    }
+}
