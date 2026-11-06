@@ -19,6 +19,8 @@
 html,
 body {
     min-height: 100%;
+    color-scheme: only light;
+    background-color: #ffd9e2;
 }
 
 body {
